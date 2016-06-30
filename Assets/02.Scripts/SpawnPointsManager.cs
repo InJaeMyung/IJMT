@@ -83,11 +83,12 @@ public class SpawnPointsManager : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-		if (spawnCount > 0) {
-			pointsSpawn ();
-		}
-		if (spawnCount <= 0) {
-			return;
-		}
+
 	}
+	void OnTriggerEnter(Collider coll)
+	{
+		if(coll.gameObject.tag=="Player")
+			pointsSpawn ();
+	}
+
 }

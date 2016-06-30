@@ -21,7 +21,9 @@ public class EnemyMove : MonoBehaviour {
 	public float rotationSpeed=10.0f;
 	public float attackableRange = 2.5f;
 	public float attackStateMaxTime=2.0f;
+	public GameObject deadObj = null;
 
+	int hp=5;
 	PlayerState playerState;
 	CharacterController playerController;
 
@@ -75,7 +77,48 @@ public class EnemyMove : MonoBehaviour {
 				spiderState = SPIDERSTATE.MOVE;
 			}
 			break;
+		case SPIDERSTATE.DAMAGE:
+			--hp;
+			GetComponent<Animation> () ["damage"].speed = 0.5f;
+			GetComponent<Animation> ().Play ("damage");
+			GetComponent<Animation> ().PlayQueued ("iddle", QueueMode.CompleteOthers);
+			stateTime = 0.0f;
+			spiderState = SPIDERSTATE.IDLE;
+			if (hp <= 0) {
+				spiderState = SPIDERSTATE.DEAD;
+			}
+			break;
+		case SPIDERSTATE.DEAD:
+			StartCoroutine (DeadProcess ());
+			spiderState = SPIDERSTATE.NONE;
+			break;
+		}
+	}
+	void OnCollisionEnter(Collision coll)
+	{
+		if (spiderState == SPIDERSTATE.NONE || spiderState == SPIDERSTATE.DEAD)
+			return;
+		if(coll.gameObject.tag!="Player")
+			return;
+		spiderState = SPIDERSTATE.DAMAGE;
+	}
+	IEnumerator DeadProcess()
+	{
+		GetComponent<Animation> () ["death"].speed = 0.5f;
+		GetComponent<Animation> ().Play ("death");
+		while (GetComponent<Animation> ().isPlaying) {
+			yield return new WaitForEndOfFrame ();
 
+			//죽은 오브젝트 교체
+			yield return new WaitForSeconds(0.5f);
+			GameObject deadObj2 = Instantiate (deadObj)as GameObject;
+			Vector3 deadObjPos = transform.position;
+			deadObjPos.y = 0.6f;
+			deadObj2.transform.position = deadObjPos;
+			float rotationY = Random.Range (-180.0f, 180f);
+			deadObj.transform.eulerAngles = new Vector3 (0.0f, rotationY, 0.0f);
+			InitSpider ();
+			gameObject.SetActive (false);
 		}
 	}
 	void InitSpider()
