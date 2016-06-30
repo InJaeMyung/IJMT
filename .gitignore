@@ -2,3 +2,4 @@ Temp/
 *.sln
 Library/
 *.csproj
+*.userprefs
