@@ -3,3 +3,6 @@ Temp/
 Library/
 *.csproj
 *.userprefs
+Assets/Character Pack/
+Assets/FantasyMonster/
+Assets/Character Pack.meta

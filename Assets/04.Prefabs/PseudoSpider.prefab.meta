@@ -1,7 +1,12 @@
 fileFormatVersion: 2
-guid: f3dd6f064acbb0e438fe566914b14765
-timeCreated: 1467165847
-licenseType: Free
+guid: 0f32f9f707268da40a09991a6ac4c3ea
+labels:
+- Critter
+- Insect
+- Spider
+- Alien
+- Pseudo
+- Creature
 NativeFormatImporter:
   userData: 
   assetBundleName: 
